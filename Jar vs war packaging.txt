@@ -1,0 +1,7 @@
+The first and most obvious difference is the file extension. JARs have the .jar extension, whereas the WAR file has the .war extension.
+
+The second main difference is their purpose and the way they function. JAR files allow us to package multiple files in order to use it as a library, plugin, or any kind of application. On the other hand, WAR files are used only for web applications.
+
+
+
+Finally, we can run a JAR from the command line if we build it as an executable JAR without using additional software. Or, we can use it as a library. In contrast, we need a server to execute a WAR.

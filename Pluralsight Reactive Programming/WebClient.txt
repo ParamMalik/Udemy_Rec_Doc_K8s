@@ -1,0 +1,61 @@
+Web client is a client for making HTTP requests
+by default it uses Reactor and netty 
+and for that it provides an non-blocking reactive API that accepts and returns
+publishers like Flux and Mono
+
+It's an alternative to RestTemplate
+
+Advantage is that WebClient offers a more functional and high-level API
+
+Three Steps to work with WebClient
+1 Creating a WebClient instance
+2 How to prepare a request
+3 Reading the response
+
+WebClient is an interface
+
+To create an instance of its implementation we can use create static method of WebClient
+
+WebClient webClient = WebClient.create();
+
+OR
+
+WebClient webClient = WebClient.create("http://localhost:8080/");
+
+OR
+
+we can use builder and build method
+
+WebClient webClient = WebClient.builder()
+				.baseUrl("http://localhost:8080/")
+				.defaultHeader(HttpHeaders.USER_AGENT, "Spring 5")
+				.build();
+
+// all the settings we configure here are fixed and can not change later
+
+Or
+
+we can use mutate method to create new instance with the previous properties
+
+NOTE - bodyValue() works with plain objects .
+
+NOw to execute the request and read the response we have Two options
+(GET)
+
+1 is using retrieve() after calling retrieve we can transform the body to a Mono
+of a certain type, a Mono of Void if no respose retrieve Or Use Flux of certain type if a list of objects is returned.
+
+And we can also register a custom function that will be executed when a given 
+status isn't with the response
+
+GET
+
+We can also use the method :
+exchangeToFlux(response -> response.bodyToFlux(Product.class))  
+ Or 
+exchangeToMono(response -> response.bodyToMono(Product.class))
+
+exchangeToMono(response -> response.toEntityList(Product.class))
+
+
+

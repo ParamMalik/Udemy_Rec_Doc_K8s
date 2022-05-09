@@ -1,0 +1,72 @@
+Docker volumes 
+it has virtual file system so on restart each time containers start with new state and previous data get lost so that's why we need docker volume
+
+On a host we have physical file system 
+we plug the path of physical file system path to the containers
+
+
+Folder in physical host file system in mounted into the virtual file system of Docker
+
+when containers write data in its file system. it gets autimatically written in host system.
+Data gets automatically replicated.
+
+if i change something in host system it will also appear on containers as well.
+
+So now when the container restarts it gets the data automatically from the host sytem file/folder because of volumes concept
+
+There are 3 types of volumes :
+
+HOST VOLUME
+basically to create docker volumes is using
+
+docker run command
+ 
+ex - 
+
+docker run -v /home/mount/data:/var/lib/mysql/data (reference of host directory : container directory)
+
+This type of volume is called host volume
+here we decide where to store data in host system
+
+2 docker run -v /var/lib/mysql/data   (only giving reference of container directory)
+
+now docker takes care of creating files on host system for volumes
+
+It is called as Anonymous volumes
+
+3 is improvement of ananymous 
+
+docker run -v nameoffolderhostsyste:/var/lib/mysql/data
+
+it is called as Named Volumes
+
+
+*** Mostly we use named volumes
+
+
+ex
+
+version: ""
+services:
+	mongodb:
+		image: mongo
+		ports:
+		   - "27017:27017"
+		volumes:
+			- db-data:/var/lib/mysql/data
+			- created-volume-name:container-virtual-directory
+			- mongo-data:/data/db         // example of using volume which is created below
+
+
+
+
+volumes:              # Creating volume to store container data in local host directory
+  mongo-data:         # We can create multiple volumes here just by passing list of volumes like below
+    driver: local   
+  reactive-app-data:
+    driver: local    
+
+
+Path of docker volumes in local host system
+
+is C:\ProgramData\docker\volumes

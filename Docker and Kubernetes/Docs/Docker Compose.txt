@@ -1,0 +1,42 @@
+NOTE::  This should be a  docker-compose.yml  file
+        We can place this file anywhere in our system and it will work(try)
+
+Commands:    to start  --> docker-compose up   And docker-compose up -d (means detach)
+             to stop   --> docker-compose stop
+             to terminate --> docker-compose down -v
+
+
+version: "3.8"    // this is docker compose version which we want to use
+
+services:         // inside this we write our services which we want to run
+
+  accounts:                              // This is the first service
+    image: eazybytes/accounts:latest     // this is the image to run and create container
+    mem_limit: 700m                      // memory limit to limit the memory 
+    ports:                             // port to start on
+      - "8080:8080"                 // outside world:inside container
+    networks:                     // this is common network between all services
+      - eazybank-network
+    
+  loans:
+    image: eazybytes/loans:latest
+    mem_limit: 700m
+    ports:
+      - "8090:8090"
+    networks:
+      - eazybank-network
+    
+  cards:
+    image: eazybytes/cards:latest
+    mem_limit: 700m
+    ports:
+      - "9000:9000"
+    networks:
+      - eazybank-network
+    
+networks:                     // creating the network which is common b/w all services  or initilizing the network
+  eazybank-network:
+
+
+
+how to use jib build to generate images and push (kaniko)

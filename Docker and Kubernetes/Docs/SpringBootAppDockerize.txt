@@ -1,0 +1,213 @@
+Image is a package which will have all the depencency to create a container.
+
+we can scale up the application by create the multiple instances (containers) 
+And also we can put loadbalancer before them so that every time we get request we can balance the load as well
+So that it will redirect the coming request to different instances according to the load
+
+
+Some Maven Commands (first install maven into the local system)
+1.  mvn clean install (To create jar file)
+
+To Start spring-boot program
+1.  mvn spring-boot:run  (to run the jar file)
+2. Using java command
+
+**** IMPORTANT ****
+--> java -jar target/cards.jar
+
+
+Note : open the cmd in the target folder to run the jar file
+
+
+
+
+Commands:
+
+
+-> We have to create a Dockerfile in eclipse OR intellij
+-> Also we have to give finalName in pom.xml file
+-> Run As -> Maven install 
+
+
+Before This Do Above Points :
+
+First Step :
+
+// Create spring boot app image (open cmd in workspace folder where target folder is present)
+
+--> docker build -t atbimagename:tag .
+
+
+Second Step :
+
+// pulling mongo image from docker hub
+
+--> docker pull mongo:latest
+
+--> docker run -d -p (port exposed to outside world) 27017:27017 (port inside the docker container) --name mongocontainer mongo:latest
+
+
+Third Step :
+
+// running spring app image also linking it to the mongo container 
+
+--> docker run -p 8080:8080 --name atbcontainer --link mongocontainer:mongo -d atbimagename:tag
+
+
+// To inspect the image
+
+--> docker image inspect (imageID)
+
+// To inspect the container
+
+--> docker container inspect container_Id
+
+
+// To Ckech if our app is running use 
+
+--> docker logs atbcontainer(OR Container ID)
+
+
+--> docker logs -f(means follow) ContainerID    
+ (it will go inside the container and start showing all the logs Now to work on other contaieners i can open new cmd window)
+
+
+// To stop a container
+
+--> docker stop containerID
+
+
+// To stop forcefully
+
+--> docker kill containerID
+
+
+// TO see all containers (which are stoped and which are running)
+
+--> docker ps -a (means all)
+
+
+// To run multiple container at the same time
+
+--> docker start containerID1 containerID2 containerID3
+
+
+
+// TO delete containers
+
+--> docker rm (means remove) ContainerID
+
+// To Delete images
+
+--> docker image rm -f (means forcefully) image_ID
+
+
+
+// To run new image and create container  NOTE: here we will see the logs
+
+--> docker run -p (means port) 8085(outside port):8080(inside container port) image_name
+
+
+// To run new image and create container without seeing the logs
+
+--> docker run -d (means detach -- to not enter inside the container and show the logs) -p (means port) 8085(outside port):8080(inside container port) image_name
+
+
+
+
+// To pause a container (it will pause and not take any request) (it will not stop the container just pause)
+
+--> docker container pause CONTAINER_ID
+
+
+
+// To unpause or resume the container 
+
+--> docker container unpause ContainerID
+
+// To see statictics
+
+--> docker stats
+
+
+
+// Now Run It on Postman to test it
+
+// And If i want to check mongodb data inside the container then use these commands
+
+
+--> docker exec -it mongocontainername /bin/bash
+
+
+// after this command i will enter in the conatiner
+// below command will run the mongo in the same console 
+
+
+
+---> mongo
+
+// then use command 
+
+---> show dbs;
+
+---> use dbs_name
+
+---> show collections
+
+// it will give the data inside the collection
+
+---> db.dbs_name.find().pretty()
+
+
+
+
+// BEFORE THE BELOW PUSH
+// if giving access denied error
+// use    docker logout
+// and    docker login
+IMPORTANT ::  to login instead of password use access token
+
+To generate new token with different access  
+GO TO ---> click on username
+      --> account setting 
+      ---> security
+	---> access token
+
+This below step(rename the image using tag command) is mandatory to push the image --->
+
+// docker tag firstImage   github_username/new_name:tag
+// docker push github_username/new_name:tag
+
+
+
+// We Also can upload the image into docker hub repo
+
+using these commands
+
+--> docker tag image_id  username/image:tag
+
+// a new image i.e username/image:tag will be created
+// Now 
+
+--> docker push username/image:tag
+
+// this command will push the image to docker hub
+
+
+
+One more command to push
+
+--> docker push docker.io image_name:tag
+
+
+To PUll Image from docker repo
+
+--> docker pull image_name:tag
+
+
+
+
+
+
+
+

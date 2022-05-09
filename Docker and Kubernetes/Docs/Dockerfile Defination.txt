@@ -1,0 +1,63 @@
+maven command to skip the test cases while install
+
+--- >  mvn clean install -Dmaven.test.skip=false
+
+
+Docker file definition
+
+>> Create a file without extention and with the name : Dockerfile (case sensitive)
+
+
+// Base image on top of which our application will run
+FROM openjdk:11
+
+// who is maintaining the docker file or project (NOT NEcessary)
+MAINTAINER param
+
+// When will build this project's jar file (Or when we will convert the jar file into the docker image)
+// It will copy the jar file from target folder and paste it in the docker image file system
+
+COPY target/cards.jar cards.jar
+
+// This is the command which docker will use to run the image and create container from it. 
+// (To run the jar file using java command is :     java -jar cards.jar )
+
+ENTRYPOINT ["java","-jar","/cards.jar"]
+
+
+
+THIS IS A LONGEST AND TRADITIONAL APPROACH (And one having very good knowledge of docker can write these commands)
+
+IMPORTANT : Now Spring have provided Buildpacks (replacement for Dockerfile)
+Here Buildpacks convert our project into images without writing the Dockerfile
+
+Buildpacks is a concept and they provide frameworks that are needed
+So For java related applications we have paketo buildpacks which is used by 
+spring boot to build images
+
+In order to use buildpacks i have to add a plugin in pom.xml file
+
+
+ <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+                        <name>${project.artifactId}</name>
+                    </image>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+// inside the name tag it is jar name
+
+NEXt Step : open project folder and open cmd (outside the target folder)
+Next Step : Use command :   mvn spring-boot:build-image
+
+           // This command internally use buildpacks to generate docker image for the project
+
+
+

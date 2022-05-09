@@ -1,0 +1,81 @@
+WebTestClient - 
+
+is used to test web apps in a non  blocking way.
+A non-blocking reactive client for testing web applications
+
+It has a declarative API and uses WebClient internally
+
+WebTestClient has almost the same API as WebClient
+
+WebTestClient is an Interface
+
+The implementation is DefalutWebTestClient and there are many ways of creating an instance.
+
+1  we can bind WebTestClient to a controller to test one controller at a time
+
+		client = WebTestClient.bindToController(controller).build(); 
+
+2  we can bind it to our router function
+
+	client = WebTestClient.bindToRouterFunction(routerFunction).build();
+
+OR
+
+3  we can bind it to the ApplicationContext to set up a server for spring connfiguratin
+
+	client = WebTestClient.bindToApplicationContext(applicationContext).build();
+
+
+These three ways can be used without a real HTTP server
+They can mock the request and response objects
+
+Now this way allows the WebTestClient to connect to the running server
+
+4 	client = WebTestClient.bindToServer().baseUrl("http://localhost:8080").build();
+
+This method gives us the option to configure the internal WebClient using the API of WebClient to set the base URL, headers, filters and other settings. 
+
+For the rest of the opitons we need to call the method configureClient to configure these settings
+
+
+5      client = WebTestClient.bindToController(controller).configureClient().baseUrl("/products").build(); 
+
+6      client = WebTestClient.bindToRouterFunction(routerFunction).configureClient().baseUrl("/products").build(); 
+
+7      client = WebTestClient.bindToApplicationContext(applicationContext).configureClient().baseUrl("/products").build(); 
+
+
+Once We Have The Instance
+
+We can use the same WebClient methods to prepare the requests ->
+
+
+client
+	.get()				// performing get request
+	.uri("/products")			// setting path to perform request
+	.exchange()                      // here to perform the request we can not use retrieve because exchange() method gives us the complete access of response not only to the body
+							// but headers , body and Status as well It gives us method to test them as well.
+							// Actually exchange() returns an implementation of internal interface of WebTestClient ie ResponseSpec, which has methods to test the Http status of the response , Headers and body as well
+
+	.expectStatus().isOk()
+	.expectHeader().contentType(MediaType.APPLICATION_JSON_UTF8)
+	.expectBodyList(Product.class).isEqualTo(expectedList)
+//    .expectBody(Product.class)
+//	.consumeWith(result -> {/* custom assertions */});     this we use to provide custom assertions
+
+If the response no content then we can use expectBody(Void.class) to ensure the resorces are released
+
+To explicitly assert we have
+
+isEmpty() method
+
+
+.expectBody().isEmpty();
+
+
+
+
+
+// StepVerifier is a class use to test Reactive Streams
+
+

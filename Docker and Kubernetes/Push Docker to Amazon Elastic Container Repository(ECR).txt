@@ -1,0 +1,39 @@
+Here One Registery contains one image and its different verisons it can store upto 1000 versions in a single repo
+
+
+This is private registery
+
+First thing we need is AWS Cli installed in our laptop to run aws commands
+
+To puch and image to the ECR repo first step is always docker login
+
+
+
+Now build the image
+
+Image Naming in docker regisitries
+
+-> registryDomain/imageName:tag
+
+then tag the imagae with aws repo name first 
+ex- 
+
+-> docker tag my-app:latest  5685.dkr.ecr.eu-cnetral-1.amazonaws.com/my-app:latest
+
+	Now push the image with new name -
+
+-> docker push 5685.dkr.ecr.eu-cnetral-1.amazonaws.com/my-app:latest
+
+
+VOLUMES IN DOCKER
+
+There is a concept of volumes in docker which is used to persist data of containers
+normally if we stop a container all the data of container also gets removed with it
+
+We attach volumes to our container to persist the data.
+
+Now to maintain that data even after container is closed we use volumes in this 
+the data gets stored in the directory/folder of host system.
+
+ 
+

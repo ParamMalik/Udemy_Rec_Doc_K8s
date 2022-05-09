@@ -1,0 +1,26 @@
+> kubectl get nodes  
+ 
+  to get all nodes present
+
+> kubectl get pods
+
+> Kubernetes on Docker Desktop
+
+> kubectl apply -f configmaps.yaml
+
+adding my configmap to kubernetes cluster
+f here is file
+
+> kubectl get configmap 
+ wii show all configmaps
+
+> kubectl delete configmap_name 
+
+
+> kubectl get services 
+  
+will get info about ports
+
+> ubectl get deployments
+
+> kubectl delete pod pod_name

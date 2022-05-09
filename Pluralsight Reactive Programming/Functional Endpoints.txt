@@ -1,0 +1,71 @@
+
+
+Handler Functions
+
+a handler function is a funtion which takes argument of type ServerRequest and return a mono of ServerResponse
+
+ServerRequest represents Http request
+and ServerRespose -> http response
+both handled in an asynchronous way
+
+
+class ProductHandler {
+
+		// Generally we use a class to group our handler functions for readability and organizational puprose
+
+
+	public Mono<ServerResponse> myHandlerFunction(ServerRequest request){
+	Mono<Product> product = request.bodyToMono(Product.class);    // we can use bodyToMono to extract the request body
+	OR
+	Flux<Product> product = request.bodyToFlux(Product.class);  // to extract the request body as flux
+
+	
+                                                                  //  now do somenthing and build a ServerResponse with a status , headers, and optionally a body as below
+
+	return ServerResponse.ok()
+			.contentType(MediaType.APPLICATION_JSON).body(product);
+
+
+}
+
+
+}
+
+
+
+There is also a functional interface named HandlerFunction that represents these type of functions
+
+
+And since router functions delegate the handling of a request to handler functions, router functions take a ServletRequest and return a mono of HandlerFunction
+
+Almost always we don't write router functions by ourself 
+We use the static method route from the RouterFunctions class to create a router function
+
+
+RouterFunctions.rout(RequestPredicate, HandlerFunction) 
+
+
+it takes 2 arguments a RequestPredicate and HandlerFunction
+
+RequestPredicate is a functional interface that represents a function that evaluates a request to see if it matches a certain path or a certain HTTP method
+
+
+We can use abstract class RequestPredicates that implements many request testing methods
+
+
+public abstract class RequestPredicates{
+	static RequestPredicate accept(MediaType... mediaTypes)               //  accept that tests if the request contains a praticular accept header
+
+	statac RequestPredicate GET(String pattern) 
+                                                                           // GET to test if the request's HTTP method is GET and the given pattern matches against request path; method, to 													test any request HTTP method, or path , to test against the given path patern
+	
+	static RequestPredicate method(HttpMethod httpMethod)
+
+	static RequestPredicate path(String pattern)
+
+
+}
+
+
+
+Router functins are evaluted in order

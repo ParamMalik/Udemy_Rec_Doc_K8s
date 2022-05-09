@@ -1,0 +1,40 @@
+version: "3.8"
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    ports:
+      - "27017:27017"    
+    volumes:
+      - mongo-data:/data/db
+      # - reactive-app-data:/data/db
+    environment:
+     - MONGO_INITDB_ROOT_USERNAME=admin
+     - MONGO_INITDB_ROOT_PASSWORD=admin
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express:latest
+    ports:
+      - "8081:8081" 
+    depends_on:
+      - mongo
+    restart: always
+    environment:
+     - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
+     - ME_CONFIG_MONGODB_ADMINPASSWORD=admin
+     - ME_CONFIG_MONGODB_SERVER=mongo
+  reactive-app:
+    container_name: reactive-mongo-app
+    image: spring-mongo-app:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    restart: always  
+volumes:              # Creating volume to store container data in local host directory
+  mongo-data:         # We can create multiple volumes here just by passing list of volumes like below
+    driver: local   
+  reactive-app-data:
+    driver: local     
+
