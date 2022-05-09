@@ -24,3 +24,41 @@ will get info about ports
 > ubectl get deployments
 
 > kubectl delete pod pod_name
+
+
+Kubernates handle cluster of nodes inside the infrastructure.
+
+Cluster is a collecation of various server to achive a result
+there are master nodes and worker nodes
+master nodes does all the work like:
+
+self healing
+putting containers/pods on worker nodes
+maintian all info regarding worker nodes
+
+
+Master Node: it checks that the worker nodes are working properly if not it does auto healing
+
+
+
+
+Kube API Server (it expose all the operations(scaling up , down , creating new instances etc) through kube API Server. It is gateway/gatekeeper to the cluster)
+Scheduler  ( When we want to deploy new microservice all that info about our deployment goes to Scheduler and then it check in the worker nodes which worker node has the less load according to that it will schedule the deployment corresponding that worker node)
+Scheduler schedules the creation , deletion and updation of our containers by taking the commands from kube API Server.
+
+Controller manager - it checks the healh of our instances. And it replaces the defected instaces with new once to maintain the no of replicas.
+			It checks the health of containers and worker nodes and based on healt check it will try to maintain the desired state(no replicas provided in the .yaml files).
+
+etcd  -- it is the brain of our cluster. it stores all the info about worker nodes stored here in form of key:value pair
+		(.yml file info also stored here)
+
+
+**** Whenever we want to interact with kubernates cluster we can interact with Master node only through kube API Server
+
+Worker Node: 
+
+kubelet   -- it is an agent run inside every worker node and it interacts with Master nodes
+Docker    -- all our woker nodes have docker installed inside them as we deploy all our docker images as container inside 		 our worker node
+kube-proxy --- it helps to expose the container endpoints to the end users
+pods      --- it is the smallest deployment component that we can deploy inside our worker node. and inside these pods we can deploy our conatiner wheather it is one or two based on requirement. But we should not deploy  - 10-20 containers inside a pod because pods are also small in nature.
+              we can think of it like a big server having a large RAM and memory in it.
